@@ -1,0 +1,25 @@
+# Python bytecode & caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environments & secrets
+.env
+.env.local
+venv/
+.venv/
+env/
+
+# VS Code & IDE settings
+.vscode/
+.idea/
+.DS_Store
+
+# Google Antigravity IDE / Agent files
+.gemini-clipboard/
+/AGENTS.md
