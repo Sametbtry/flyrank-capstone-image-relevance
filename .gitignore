@@ -23,3 +23,6 @@ env/
 # Google Antigravity IDE / Agent files
 .gemini-clipboard/
 /AGENTS.md
+
+
+data/images
