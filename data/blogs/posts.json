@@ -1,0 +1,107 @@
+[
+  {
+    "id": "post_01",
+    "title": "The Behavior of Red Foxes in Temperate Forests",
+    "content": "The red fox is one of the most adaptable wild mammals on Earth, thriving across temperate woodlands, meadows, and forest edges. Recognized by its vibrant orange-red fur, pointed black-tipped ears, and long bushy tail, this solitary hunter relies on keen hearing and agility rather than pack strength.\n\nDuring dusk and dawn, red foxes patrol their territories in search of rodents, berries, and small birds. Unlike wolves, they rarely form large social packs; instead, they live in small family units during the spring breeding season before dispersing to establish independent ranges.",
+    "expected_category": "red_fox",
+    "test_purpose": "probe_2_and_3_red_fox_core"
+  },
+  {
+    "id": "post_02",
+    "title": "Understanding Vulpes vulpes: Adaptation and Urban Survival",
+    "content": "Biologists studying Vulpes vulpes have long marveled at the ecological flexibility of this wild fox species. From boreal timberlands to suburban backyards, Vulpes vulpes adjusts its diet and denning habits to survive alongside human settlements.\n\nField researchers note that this small wild canid uses magnetic sensing to pinpoint prey beneath thick grass or winter snow. Its intelligence and cautious nocturnal routine make it one of the most successful wild carnivores in the Northern Hemisphere.",
+    "expected_category": "red_fox",
+    "test_purpose": "semantic_matching_scientific_name"
+  },
+  {
+    "id": "post_03",
+    "title": "Winter Hunting Techniques of the Forest Fox",
+    "content": "When deep snow blankets the northern woods, the orange-coated forest fox switches to a remarkable hunting strategy known as mousing. Standing motionless with its ears tilted forward, it listens for faint scratching beneath the crusted snowpack.\n\nWith a sudden vertical leap, the agile predator dives nose-first into the drift to capture voles and mice. Its thick winter pelt and fluffy white-tipped tail provide insulation while resting in the freezing open air.",
+    "expected_category": "red_fox",
+    "test_purpose": "semantic_matching_attributes"
+  },
+  {
+    "id": "post_04",
+    "title": "Pack Dynamics and Howling Communication in Gray Wolves",
+    "content": "Gray wolves are deeply social apex predators that rely on coordinated teamwork to survive harsh wilderness environments. A typical wolf pack consists of a breeding pair and their offspring, working together to patrol vast territories and bring down large ungulates.\n\nLong-distance howling serves as the primary communication network across dense pine forests and snowy ridges. These vocalizations rally scattered pack members before a hunt and warn rival packs away from established hunting grounds.",
+    "expected_category": "wolf",
+    "test_purpose": "standard_match_wolf"
+  },
+  {
+    "id": "post_05",
+    "title": "Canis lupus: Apex Predators of the Northern Wilderness",
+    "content": "Ecologists consider Canis lupus a keystone species whose presence reshapes entire river and forest ecosystems. By regulating populations of large herbivores, these powerful wild canines allow willow groves and riverbank vegetation to recover.\n\nEquipped with strong jaws, thick gray-and-white coats, and extraordinary endurance, Canis lupus can travel dozens of kilometers in a single night through mountainous terrain and subarctic tundra.",
+    "expected_category": "wolf",
+    "test_purpose": "semantic_matching_scientific_name"
+  },
+  {
+    "id": "post_06",
+    "title": "Choosing the Right Domestic Dog Breed for Active Families",
+    "content": "Bringing a domestic dog into your home is a rewarding commitment that starts with matching a breed's energy level to your daily routine. Retrievers, shepherds, and mixed-breed companions thrive on regular park walks, backyard fetch, and structured playtime.\n\nWhether adopting a playful puppy or an adult rescue dog, prospective owners should consider grooming needs, temperament around children, and space requirements to build a happy life with their household pet.",
+    "expected_category": "dog",
+    "test_purpose": "standard_match_dog"
+  },
+  {
+    "id": "post_07",
+    "title": "Canine Companionship: Training and Socialization Basics",
+    "content": "Positive reinforcement is the cornerstone of modern pet training. Teaching your furry companion reliable recall, polite leash walking, and calm greetings builds trust and keeps everyday outings stress-free.\n\nEarly socialization exposes young pets to new sounds, friendly strangers, and neighborhood parks. Just fifteen minutes of consistent obedience practice each day helps strengthen the bond between owner and loyal four-legged friend.",
+    "expected_category": "dog",
+    "test_purpose": "semantic_matching_dog"
+  },
+  {
+    "id": "post_08",
+    "title": "How Grizzly and Brown Bears Prepare for Winter Hibernation",
+    "content": "Throughout late summer and autumn, brown bears and grizzlies enter a phase called hyperphagia, eating nearly nonstop to build thick fat reserves for the coming winter. Their diet spans wild berries, roots, nuts, and migrating salmon.\n\nOnce temperatures plummet, these massive forest mammals retreat into excavated hillside dens or hollow tree trunks. During winter torpor, a bear's heart rate drops dramatically, allowing it to survive months without eating or drinking.",
+    "expected_category": "bear",
+    "test_purpose": "standard_match_bear"
+  },
+  {
+    "id": "post_09",
+    "title": "Foraging Habits of Ursus arctos in Mountain River Valleys",
+    "content": "Along cold alpine streams and coastal estuaries, Ursus arctos gathers during the seasonal fish runs. Using broad paws and sharp claws, these heavy omnivores wade into rushing rapids to intercept leaping salmon.\n\nDespite their immense size and muscular shoulders, Ursus arctos moves with surprising speed across rocky shorelines and dense woodland trails, playing a vital role in carrying marine nutrients deep into surrounding forests.",
+    "expected_category": "bear",
+    "test_purpose": "semantic_matching_scientific_name"
+  },
+  {
+    "id": "post_10",
+    "title": "Tracking the Giant Moose Through Boreal Wetlands",
+    "content": "Standing taller than a horse at the shoulder, the moose is the largest member of the deer family. Visitors to northern lakes and marshy meadows often spot these long-legged giants wading chest-deep into calm water to graze on aquatic plants.\n\nBull moose are unmistakable in late summer and fall thanks to their broad, palmate antlers, which can span nearly two meters across. Despite their quiet demeanor, these powerful herbivores should always be observed from a safe distance.",
+    "expected_category": "moose",
+    "test_purpose": "standard_match_moose"
+  },
+  {
+    "id": "post_11",
+    "title": "Alces alces: Antler Growth and Autumn Rutting Season",
+    "content": "Every spring, male Alces alces begin growing a brand-new set of massive palmate antlers covered in nutrient-rich velvet. By early autumn, the velvet is shed against spruce and birch trunks just in time for the breeding season.\n\nAdapted to deep snow and subzero cold, Alces alces uses its long legs to stride over fallen timber and browse on willow twigs, aspen bark, and conifer shoots across northern taiga forests.",
+    "expected_category": "moose",
+    "test_purpose": "semantic_matching_scientific_name"
+  },
+  {
+    "id": "post_12",
+    "title": "Coral Reef Conservation and Sea Turtle Migration",
+    "content": "Green sea turtles navigate thousands of kilometers across open ocean currents to return to the exact tropical beaches where they hatched. Along their journey, healthy coral reefs and seagrass meadows provide critical shelter and feeding grounds.\n\nMarine biologists are working to restore bleached reefs and reduce coastal light pollution so that hatchlings can safely reach the surf under moonlit skies.",
+    "expected_category": null,
+    "test_purpose": "probe_4_no_confident_match_marine_animal"
+  },
+  {
+    "id": "post_13",
+    "title": "Golden Eagles and the Physics of High-Altitude Soaring",
+    "content": "With wingspans exceeding two meters, golden eagles master mountain updrafts and thermal columns to glide effortlessly over steep canyons without flapping. Their extraordinary eyesight allows them to spot small prey from more than a kilometer away.\n\nBuilt for aerial speed, these raptors fold their wings into dramatic stoops when diving along cliff faces, making them some of the most formidable birds of prey in the sky.",
+    "expected_category": null,
+    "test_purpose": "probe_4_no_confident_match_bird"
+  },
+  {
+    "id": "post_14",
+    "title": "African Savanna Lions: Pride Structure and Territory",
+    "content": "Across the sun-drenched grasslands of East Africa, lion prides coordinate ambush hunts under the cover of twilight. Lionesses form the stable core of the pride, raising cubs communally while male lions patrol wide acacia-studded borders.\n\nUnlike solitary big cats such as leopards or tigers, Panthera leo depends on vocal roars and cooperative defense to hold prime savanna watering holes during the dry season.",
+    "expected_category": null,
+    "test_purpose": "probe_4_no_confident_match_hard_negative_mammal"
+  },
+  {
+    "id": "post_15",
+    "title": "Designing Resilient Microservices with PostgreSQL and Docker",
+    "content": "Modern backend services rely on clean layer separation, strict schema validation at API boundaries, and idempotent background workers to stay reliable under load. Containerizing PostgreSQL with Docker ensures reproducible local development and consistent database migrations.\n\nBy tracking latency, retry budgets, and external API call costs per request, engineering teams can spot bottlenecks early and prevent cascading failures in production.",
+    "expected_category": null,
+    "test_purpose": "probe_4_no_confident_match_off_domain"
+  }
+]
