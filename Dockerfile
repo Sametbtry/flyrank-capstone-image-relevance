@@ -38,6 +38,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
     python -m pip install -r requirements.txt
 
+# Cache directory for HuggingFace / sentence-transformers models under non-root user.
+ENV HF_HOME=/app/.cache/huggingface
+RUN mkdir -p /app/.cache/huggingface && chown -R appuser:appuser /app/.cache
+
 # Switch to the non-privileged user to run the application.
 USER appuser
 
