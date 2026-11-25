@@ -1,7 +1,9 @@
+from typing import Literal
 from pydantic import BaseModel, Field
 
+
 class Metadata(BaseModel):
-    category: str                                    # main entity in the image (e.g. "red_fox", "wolf", "moose")
+    category: str                                   # main entity in the image (e.g. "red_fox", "wolf", "moose")
     attributes: list[str]                           # descriptive traits or details
     caption: str                                    # readable image description
     confidence: float = Field(ge=0.0, le=1.0)       # model certainty score from 0-1
@@ -13,3 +15,28 @@ class BlogPostSeed(BaseModel):
     content: str                                    # full post body used for embedding & subject extraction
     expected_category: str | None = None            # eval-only ground truth ("red_fox", "wolf", etc., or None)
     test_purpose: str                               # eval-only scenario label (e.g. probe_2_and_3, probe_4)
+
+
+class ImageOut(Metadata):
+    id: int
+    file_path: str
+    flagged: bool
+
+
+class PostCreate(BaseModel):
+    title: str = Field(min_length=1)
+    content: str = Field(min_length=1)
+    expected_category: str | None = None
+
+
+class PostOut(PostCreate):
+    id: int
+
+
+class ReviewCreate(BaseModel):
+    decision: Literal["approved", "rejected"]
+
+
+class ReviewOut(ReviewCreate):
+    id: int
+    suggestion_id: int
