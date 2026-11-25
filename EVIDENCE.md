@@ -125,8 +125,28 @@ Each requirement from Section 6 of the Capstone Brief is tracked below with real
 
 ## Quality & Documentation
 
-- [ ] **A small labeled evaluation dataset measures top-1 precision — the number is in your README.**
-  - *Phase 4 — pending (`Stage 4.4`).*
+- [x] **A small labeled evaluation dataset measures top-1 precision — the number is in your README.**
+  - Implementation: `data/eval_labels.json` (15 hand-labeled posts) + `scripts/evaluate.py` + `README.md` (`## Evaluation`).
+  - Proof (`python -m scripts.evaluate`):
+  ```text
+  [PASS] post_id=01 | predicted=data/images/red_fox/red_fox_10.jpg | expected=data/images/red_fox/red_fox_10.jpg
+  [MISS] post_id=02 | predicted=data/images/red_fox/red_fox_08.jpg | expected=data/images/red_fox/red_fox_06.jpg
+  [PASS] post_id=03 | predicted=data/images/red_fox/red_fox_04.jpg | expected=data/images/red_fox/red_fox_04.jpg
+  [MISS] post_id=04 | predicted=data/images/wolf/wolf_04.jpg | expected=data/images/wolf/wolf_07.jpg
+  [PASS] post_id=05 | predicted=data/images/wolf/wolf_04.jpg | expected=data/images/wolf/wolf_04.jpg
+  [PASS] post_id=06 | predicted=data/images/dog/dog_06.jpg | expected=data/images/dog/dog_06.jpg
+  [PASS] post_id=07 | predicted=data/images/dog/dog_10.jpg | expected=data/images/dog/dog_10.jpg
+  [PASS] post_id=08 | predicted=data/images/bear/bear_02.jpg | expected=data/images/bear/bear_02.jpg
+  [PASS] post_id=09 | predicted=data/images/bear/bear_01.jpg | expected=data/images/bear/bear_01.jpg
+  [PASS] post_id=10 | predicted=data/images/moose/moose_05.jpg | expected=data/images/moose/moose_05.jpg
+  [PASS] post_id=11 | predicted=data/images/moose/moose_07.jpg | expected=data/images/moose/moose_07.jpg
+  [PASS] post_id=12 | predicted=None | expected=None
+  [PASS] post_id=13 | predicted=None | expected=None
+  [PASS] post_id=14 | predicted=None | expected=None
+  [PASS] post_id=15 | predicted=None | expected=None
+
+  Top-1 Precision: 13/15 (86.67%)
+  ```
 
 - [ ] **README with architecture explanation and diagram; the required files from Section 11 present.**
   - *Phase 4 — pending (`Stage 5.0`: architecture diagram in `README.md` + `capstone.yaml`).*

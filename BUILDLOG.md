@@ -56,3 +56,4 @@ This log documents where AI tools helped, where suggestions were wrong or over-e
 - **What I changed:**
   - Removed `POST /images` and `ImageCreate`, kept `POST /reviews/{suggestion_id}` (required for the approve/reject workflow), and added `GET /images/{image_id}` and `GET /posts/{post_id}` for single-record lookup.
   - Replaced `INSERT ... ON CONFLICT DO UPDATE` in `_save_suggestion` with a `SELECT` check followed by `UPDATE` (when the pair exists) or `INSERT` (when new), keeping `suggestions.id` sequential.
+  - Keyed `data/eval_labels.json` by post `title` and `file_path` (instead of auto-increment database IDs) and evaluated directly over embeddings + `check_mismatch_guard` in `scripts/evaluate.py` (`SIM_THRESHOLD = 0.33`) so evaluation runs deterministically on any database without requiring prior API calls.
