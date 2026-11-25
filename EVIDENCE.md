@@ -24,11 +24,59 @@ Each requirement from Section 6 of the Capstone Brief is tracked below with real
 - [x] **Images are processed through a batch background job with retries.**
   - Implementation: `scripts/batch_image.py` (`tag_with_retries`, `MAX_RETRIES = 3`, `FALLBACK_MODELS`, `5s` pacing, `2 ** attempt` exponential backoff, PostgreSQL idempotency via `ON CONFLICT (file_path) DO NOTHING`).
     ```text
+    [1/50] [SKIP] data/images/bear/bear_01.jpg (already in DB)
+    [2/50] [SKIP] data/images/bear/bear_02.jpg (already in DB)
+    [3/50] [SKIP] data/images/bear/bear_03.jpg (already in DB)
+    [4/50] [SKIP] data/images/bear/bear_04.jpg (already in DB)
+    [5/50] [SKIP] data/images/bear/bear_05.jpg (already in DB)
+    [6/50] [SKIP] data/images/bear/bear_06.jpg (already in DB)
+    [7/50] [SKIP] data/images/bear/bear_07.jpg (already in DB)
+    [8/50] [SKIP] data/images/bear/bear_08.jpg (already in DB)
+    [9/50] [SKIP] data/images/bear/bear_09.jpg (already in DB)
+    [10/50] [SKIP] data/images/bear/bear_10.jpg (already in DB)
+    [11/50] [SKIP] data/images/dog/dog_01.jpg (already in DB)
+    [12/50] [SKIP] data/images/dog/dog_02.jpg (already in DB)
+    [13/50] [SKIP] data/images/dog/dog_03.jpg (already in DB)
+    [14/50] [SKIP] data/images/dog/dog_04.jpg (already in DB)
+    [15/50] [SKIP] data/images/dog/dog_05.jpg (already in DB)
+    [16/50] [SKIP] data/images/dog/dog_06.jpg (already in DB)
+    [17/50] [SKIP] data/images/dog/dog_07.jpg (already in DB)
+    [18/50] [SKIP] data/images/dog/dog_08.jpg (already in DB)
+    [19/50] [SKIP] data/images/dog/dog_09.jpg (already in DB)
+    [20/50] [SKIP] data/images/dog/dog_10.jpg (already in DB)
+    [21/50] [SKIP] data/images/moose/moose_01.jpg (already in DB)
+    [22/50] [SKIP] data/images/moose/moose_02.jpg (already in DB)
+    [23/50] [SKIP] data/images/moose/moose_03.jpg (already in DB)
+    [24/50] [SKIP] data/images/moose/moose_04.jpg (already in DB)
+    [25/50] [SKIP] data/images/moose/moose_05.jpg (already in DB)
+    [26/50] [SKIP] data/images/moose/moose_06.jpg (already in DB)
+    [27/50] [SKIP] data/images/moose/moose_07.jpg (already in DB)
+    [28/50] [SKIP] data/images/moose/moose_08.jpg (already in DB)
+    [29/50] [SKIP] data/images/moose/moose_09.jpg (already in DB)
+    [30/50] [SKIP] data/images/moose/moose_10.jpg (already in DB)
+    [31/50] [SKIP] data/images/red_fox/red_fox_01.jpg (already in DB)
+    [32/50] [SKIP] data/images/red_fox/red_fox_02.jpg (already in DB)
+    [33/50] [SKIP] data/images/red_fox/red_fox_03.jpg (already in DB)
+    [34/50] [SKIP] data/images/red_fox/red_fox_04.jpg (already in DB)
+    [35/50] [SKIP] data/images/red_fox/red_fox_05.jpg (already in DB)
+    [36/50] [SKIP] data/images/red_fox/red_fox_06.jpg (already in DB)
+    [37/50] [SKIP] data/images/red_fox/red_fox_07.jpg (already in DB)
+    [38/50] [SKIP] data/images/red_fox/red_fox_08.jpg (already in DB)
+    [39/50] [SKIP] data/images/red_fox/red_fox_09.jpg (already in DB)
+    [40/50] [SKIP] data/images/red_fox/red_fox_10.jpg (already in DB)
+    [41/50] [SKIP] data/images/wolf/wolf_01.jpg (already in DB)
+    [42/50] [SKIP] data/images/wolf/wolf_02.jpg (already in DB)
+    [43/50] [SKIP] data/images/wolf/wolf_03.jpg (already in DB)
+    [44/50] [SKIP] data/images/wolf/wolf_04.jpg (already in DB)
+    [45/50] [SKIP] data/images/wolf/wolf_05.jpg (already in DB)
+    [46/50] [SKIP] data/images/wolf/wolf_06.jpg (already in DB)
+    [47/50] [SKIP] data/images/wolf/wolf_07.jpg (already in DB)
     [48/50] [SKIP] data/images/wolf/wolf_08.jpg (already in DB)
     [49/50] [SKIP] data/images/wolf/wolf_09.jpg (already in DB)
     [50/50] [SKIP] data/images/wolf/wolf_10.jpg (already in DB)
 
     Batch complete — Tagged: 0 | Skipped: 50 | Failed: 0 | Total in DB: 50
+
     ```
 
 - [x] **Vision and embedding costs are tracked per call.**
@@ -148,5 +196,15 @@ Each requirement from Section 6 of the Capstone Brief is tracked below with real
   Top-1 Precision: 13/15 (86.67%)
   ```
 
-- [ ] **README with architecture explanation and diagram; the required files from Section 11 present.**
-  - *Phase 4 — pending (`Stage 5.0`: architecture diagram in `README.md` + `capstone.yaml`).*
+- [x] **README with architecture explanation and diagram; the required files from Section 11 present.**
+  - Implementation: `README.md` (architecture explanation, ASCII + Mermaid diagram, setup/seed commands, API table, Top-1 Precision `13/15 (86.67%)`, and limitations) + Section 11 submission pack files in repository root (`README.md`, `capstone.yaml`, `EVIDENCE.md`, `BUILDLOG.md`, `DESIGN.md`, `.env.example`, `LICENSE`).
+  - Proof:
+  ```text
+  README.md
+  capstone.yaml
+  EVIDENCE.md
+  BUILDLOG.md
+  DESIGN.md
+  .env.example
+  LICENSE
+  ```

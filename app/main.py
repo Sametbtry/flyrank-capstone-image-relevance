@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, HTTPException
 from psycopg import AsyncConnection, errors
-from app.db import pool, get_connection
+from app.db import pool, get_connection, init_db
 from app.cosine_similarity import cosine_similarity
 from app.guard import check_mismatch_guard
 from app.schema import ImageOut, PostCreate, PostOut, ReviewCreate, ReviewOut
@@ -9,7 +9,8 @@ from app.schema import ImageOut, PostCreate, PostOut, ReviewCreate, ReviewOut
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Open the connection pool at startup and close it at shutdown."""
+    """Ensure schema exists, open connection pool at startup, and close at shutdown."""
+    init_db()
     await pool.open()
     yield
     await pool.close()
