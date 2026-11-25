@@ -8,55 +8,112 @@ See [DESIGN.md](DESIGN.md) for the full design document, database schema, guard 
 
 ## Architecture
 
-```text
-Images (data/images/*) ──(scripts/batch_image.py)──> Gemini Vision API
-                                                          │
-                                        Pydantic Metadata + Cost Logging
-                                                          ▼
-                                               PostgreSQL: images
-                                                          │
-                                             (scripts/embed_images.py)
-                                             all-MiniLM-L6-v2 (384-d)
-                                                          ▼
-                                          PostgreSQL: image_embeddings
-                                                          │
-Posts (data/blogs/posts.json) ──(scripts/seed_posts.py)───┼──> PostgreSQL: posts + post_embeddings
-                                                          │
-GET /suggestions/{post_id}/ ──────────────────────────────┘
-  ├── 1. Cosine Similarity Ranking (post_vector × image_vectors, top 5)
-  ├── 2. Mismatch Guard (app/guard.py)
-  │       ├── Check 1: Subject Match (image.category == post.expected_category)
-  │       ├── Check 2: Similarity Threshold (similarity >= 0.33)
-  │       └── Check 3: Confidence Threshold (confidence >= 0.70)
-  ├── 3. Persist outcome to PostgreSQL: suggestions
-  │       ├── Match found    -> {"result": "match", "suggestion": ...}
-  │       └── All rejected   -> {"result": "no confident match", "reason": ...}
-  └── 4. Human Review API: GET/POST /reviews/{suggestion_id} -> PostgreSQL: review_decisions
-```
+Two parallel semantic streams (vision-tagged image captions and blog posts) meet in a shared 384-dimensional vector space, where every ranked recommendation must clear the three-check **Mismatch Guard** before persistence and human review.
 
 ```mermaid
-flowchart TD
-    subgraph Ingestion["1. Batch Ingestion & Embeddings"]
-        IMG["data/images/ (50 wildlife photos)"] -->|scripts/batch_image.py| VIS["Gemini Vision (app/vision.py)\nPydantic Metadata + Cost Log"]
-        VIS -->|idempotent upsert| DB_IMG[("PostgreSQL: images")]
-        DB_IMG -->|scripts/embed_images.py| EMB["Local Embeddings (app/embeddings.py)\nall-MiniLM-L6-v2"]
-        EMB --> DB_IEMB[("PostgreSQL: image_embeddings")]
-
-        POSTS["data/blogs/posts.json (15 posts)"] -->|scripts/seed_posts.py| DB_POSTS[("PostgreSQL: posts")]
-        DB_POSTS -->|title + content| EMB
-        EMB --> DB_PEMB[("PostgreSQL: post_embeddings")]
+flowchart TB
+    subgraph Ingestion["1. Data Ingestion & Local Embeddings (Batch CLI)"]
+        PEX["Pexels API"] --> FETCH["scripts/fetch_dataset.py<br/>50 wildlife photos → data/images/"]
+        FETCH --> BATCH["scripts/batch_image.py<br/>Retries · Pacing · Idempotent"]
+        BATCH --> VIS["Gemini Vision (app/vision.py)<br/>Pydantic Metadata + Cost Log"]
+        EMB_IMG["scripts/embed_images.py<br/>all-MiniLM-L6-v2 (384-d)"]
+        POST_JSON["data/blogs/posts.json<br/>15 blog posts"] --> SEED["scripts/seed_posts.py<br/>all-MiniLM-L6-v2 (384-d)"]
     end
 
-    subgraph Matching["2. Ranking, Mismatch Guard & Review API (app/main.py)"]
-        REQ["GET /suggestions/{post_id}/"] --> SIM["Cosine Similarity Ranking\n(app/cosine_similarity.py)"]
-        DB_IEMB --> SIM
-        DB_PEMB --> SIM
-        SIM -->|Top 5 candidates| GUARD["Mismatch Guard (app/guard.py)\n1. Subject Match\n2. Similarity >= 0.33\n3. Confidence >= 0.70"]
-        GUARD -->|Pass or Reject + Reason| DB_SUG[("PostgreSQL: suggestions")]
-        DB_SUG --> REV["GET /reviews/{id}\nPOST /reviews/{id} (approve / reject)"]
-        REV --> DB_REV[("PostgreSQL: review_decisions")]
+    subgraph Storage["2. Persistence Layer (PostgreSQL)"]
+        DB_IMG[("images<br/>tags · caption · flagged")]
+        DB_IEMB[("image_embeddings<br/>384-d vectors")]
+        DB_POST[("posts")]
+        DB_PEMB[("post_embeddings<br/>384-d vectors")]
+        DB_SUG[("suggestions<br/>score · guard_passed · reason")]
+        DB_REV[("review_decisions<br/>approved / rejected")]
     end
+
+    subgraph Serving["3. Matching Engine, Mismatch Guard & Review API (FastAPI)"]
+        CLIENT(["API Client / Swagger UI"]) --> REQ["GET /suggestions/{post_id}/"]
+        REQ --> SIM["Cosine Similarity Ranking<br/>app/cosine_similarity.py (Top 5)"]
+        SIM --> GUARD{"Mismatch Guard (app/guard.py)<br/>1. Subject Match<br/>2. Similarity >= 0.33<br/>3. Confidence >= 0.70"}
+        GUARD -->|Pass| MATCH["Match Response<br/>suggested image + score"]
+        GUARD -->|All Fail| REJECT["No Confident Match<br/>top candidate + rejection reason"]
+        CLIENT --> REV_API["GET /reviews/{id}<br/>POST /reviews/{id}"]
+    end
+
+    VIS --> DB_IMG
+    DB_IMG --> EMB_IMG
+    EMB_IMG --> DB_IEMB
+    SEED --> DB_POST
+    SEED --> DB_PEMB
+    DB_IEMB --> SIM
+    DB_PEMB --> SIM
+    MATCH --> DB_SUG
+    REJECT --> DB_SUG
+    DB_SUG --> REV_API
+    REV_API --> DB_REV
+
+    classDef external fill:#1e293b,stroke:#64748b,color:#f8fafc
+    classDef ai fill:#312e81,stroke:#818cf8,color:#eef2ff
+    classDef db fill:#0f172a,stroke:#38bdf8,color:#e0f2fe
+    classDef api fill:#134e4a,stroke:#2dd4bf,color:#f0fdfa
+    classDef guard fill:#78350f,stroke:#fbbf24,color:#fef3c7
+    classDef pass fill:#14532d,stroke:#4ade80,color:#dcfce7
+    classDef fail fill:#7f1d1d,stroke:#f87171,color:#fee2e2
+
+    class PEX,POST_JSON,CLIENT external
+    class FETCH,BATCH,VIS,EMB_IMG,SEED ai
+    class DB_IMG,DB_IEMB,DB_POST,DB_PEMB,DB_SUG,DB_REV db
+    class REQ,SIM,REV_API api
+    class GUARD guard
+    class MATCH pass
+    class REJECT fail
 ```
+
+<details>
+<summary>ASCII Architecture Diagram (plain-text view)</summary>
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. DATA INGESTION & LOCAL EMBEDDINGS (Batch CLI)                                    │
+│                                                                                     │
+│   Pexels API ─▶ scripts/fetch_dataset.py ─▶ data/images/ (50 photos)                │
+│                                                  │                                  │
+│                                     scripts/batch_image.py                          │
+│                                     (Gemini Vision + Pydantic + Cost Log)           │
+│                                                  ▼                                  │
+│                                     PostgreSQL: images                              │
+│                                                  │                                  │
+│                                     scripts/embed_images.py (all-MiniLM-L6-v2)      │
+│                                                  ▼                                  │
+│                                     PostgreSQL: image_embeddings (384-d)            │
+│                                                                                     │
+│   data/blogs/posts.json (15) ─▶ scripts/seed_posts.py ─▶ PostgreSQL: posts          │
+│                                                       └▶ post_embeddings            │
+└──────────────────────────────────────────────────┬──────────────────────────────────┘
+                                                   │
+                                                   ▼
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│ 2. MATCHING ENGINE, MISMATCH GUARD & REVIEW API (FastAPI)                           │
+│                                                                                     │
+│   API Client ─▶ GET /suggestions/{post_id}/                                         │
+│                      │                                                              │
+│                      ▼                                                              │
+│                 Cosine Similarity Ranking (post_vector × image_vectors → Top 5)     │
+│                      │                                                              │
+│                      ▼                                                              │
+│                 Mismatch Guard (app/guard.py)                                       │
+│                   [1] Subject Match    (image.category == post.expected_category)   │
+│                   [2] Similarity Gate  (similarity >= 0.33)                         │
+│                   [3] Confidence Gate  (confidence >= 0.70)                         │
+│                      │                                                              │
+│                      ├── Pass ─────▶ {"result": "match", "suggestion": ...}         │
+│                      └── All Fail ─▶ {"result": "no confident match", "reason": ...}│
+│                      │                                                              │
+│                      ▼                                                              │
+│                 PostgreSQL: suggestions ──▶ GET /reviews/{id}                       │
+│                                         └── POST /reviews/{id} ─▶ review_decisions  │
+└─────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+</details>
 
 ---
 
